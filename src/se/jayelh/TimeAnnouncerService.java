@@ -89,6 +89,8 @@ public class TimeAnnouncerService extends Service implements
                 + stoped);
         mNM = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
 
+        
+//        startForeground(id, notification)
         // // Display a notification about us starting. We put an icon in the
         // // status bar.
         // showNotification();
@@ -102,10 +104,8 @@ public class TimeAnnouncerService extends Service implements
     @Override
     public void onDestroy() {
         Log.v("TimeAnnouncerService", "onDestroy");
-        // if (stoped) {
-        Log.v("TimeAnnouncerService", "onDestroy stoped");
         // // Cancel the persistent notification.
-        // mNM.cancel(R.string.clock_service_started);
+         mNM.cancel(R.string.clock_service_started);
 
         wl.release();
         tts.shutdown();
@@ -113,7 +113,6 @@ public class TimeAnnouncerService extends Service implements
         // Tell the user we stopped.
         Toast.makeText(this, R.string.clock_service_stopped, Toast.LENGTH_SHORT)
                 .show();
-        // }
     }
 
     @Override
@@ -124,40 +123,38 @@ public class TimeAnnouncerService extends Service implements
         Log.v("onBind",
                 "\nTime: " + rightNow.get(Calendar.SECOND)
                         + rightNow.get(Calendar.MILLISECOND));
+
         return mBinder;
     }
 
-    /**
-     * Show a notification while this service is running.
-     */
-    private void showNotification() {
-        // In this sample, we'll use the same text for the ticker and the
-        // expanded notification
-        CharSequence text = getText(R.string.clock_service_started);
-
-        // Set the icon, scrolling text and timestamp
-        Notification notification = new Notification(R.drawable.stat_sample,
-                text, System.currentTimeMillis());
-
-        // The PendingIntent to launch our activity if the user selects this
-        // notification
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
-                new Intent(this, AutomaticTimeAnnouncer.class), 0);
-
-        // Set the info for the views that show in the notification panel.
-        notification.setLatestEventInfo(this,
-                getText(R.string.clock_service_label), text, contentIntent);
-
-        // Send the notification.
-        // We use a layout id because it is a unique number. We use it later to
-        // cancel.
-        mNM.notify(R.string.clock_service_started, notification);
-    }
 
     public void onInit(int status) {
 
     }
 
+    /**
+     * Show a notification while this service is running.
+     * @return 
+     */
+    private Notification createNotification() {
+        CharSequence text = getText(R.string.clock_service_started);
+        
+        // Set the icon, scrolling text and timestamp
+        Notification notification = new Notification(R.drawable.stat_sample,
+                text, System.currentTimeMillis());
+        
+        // The PendingIntent to launch our activity if the user selects this
+        // notification
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+                new Intent(this, AutomaticTimeAnnouncer.class), 0);
+        
+        // Set the info for the views that show in the notification panel.
+        notification.setLatestEventInfo(this,
+                getText(R.string.clock_service_label), text, contentIntent);
+        
+        return notification;
+    }
+    
     private void timeCheck() {
 
         sayTime();
@@ -231,33 +228,6 @@ public class TimeAnnouncerService extends Service implements
                 + rightNow.get(Calendar.MILLISECOND));
     }
 
-    class SayTime extends TimerTask {
-        public void run() {
-
-        }
-    }
-
-    class RefreshHandler extends Handler {
-
-        @Override
-        public void handleMessage(Message msg) {
-            TimeAnnouncerService.this.timeCheck();
-        }
-
-        public void sleep(long delayMillis) {
-
-            this.removeMessages(0);
-
-            sendMessageDelayed(obtainMessage(0), delayMillis);
-
-        }
-
-        public void cancel() {
-            this.removeMessages(0);
-        }
-
-    }
-
     public void start() {
         Log.v("TimeAnnouncerService", "start! started: " + started
                 + " stoped: " + stoped);
@@ -266,9 +236,11 @@ public class TimeAnnouncerService extends Service implements
             stoped = false;
             // Display a notification about us starting. We put an icon in the
             // status bar.
-            showNotification();
-            // Toast.makeText(AutomaticTimeAnnouncer.this,
-            // R.string.clock_service_started, Toast.LENGTH_SHORT).show();
+            Notification notification = createNotification();
+            
+            //Start the service in the foreground, otherwise it might be killed!
+            startForeground(R.string.clock_service_started, notification);
+
 
             Calendar rightNow = Calendar.getInstance();
             rightNow.get(Calendar.MILLISECOND);
@@ -306,8 +278,11 @@ public class TimeAnnouncerService extends Service implements
         Log.v("TimeAnnouncerService", "start! started: " + started
                 + " stoped: " + stoped);
         sayTimeHandler.cancel();
+        
+        stopForeground(true);
         // Cancel the persistent notification.
-        mNM.cancel(R.string.clock_service_started);
+        
+//        mNM.cancel(R.string.clock_service_started);
         // tts.shutdown();
         started = false;
         stoped = true;
@@ -326,4 +301,29 @@ public class TimeAnnouncerService extends Service implements
         return started;
     }
 
+    class SayTime extends TimerTask {
+        public void run() {
+            
+        }
+    }
+    
+    class RefreshHandler extends Handler {
+        
+        @Override
+        public void handleMessage(Message msg) {
+            TimeAnnouncerService.this.timeCheck();
+        }
+        
+        public void sleep(long delayMillis) {
+            
+            this.removeMessages(0);
+            
+            sendMessageDelayed(obtainMessage(0), delayMillis);
+            
+        }
+        
+        public void cancel() {
+            this.removeMessages(0);
+        }
+    }
 }

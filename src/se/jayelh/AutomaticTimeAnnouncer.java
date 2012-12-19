@@ -22,7 +22,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-//import android.util.Log;
 
 public class AutomaticTimeAnnouncer extends Activity implements
         OnSharedPreferenceChangeListener {
@@ -47,13 +46,12 @@ public class AutomaticTimeAnnouncer extends Activity implements
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         Log.v("AutomaticTimeAnnouncer", "onCreate");
 
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        // mText = (TextView) findViewById(R.id.textview);
-        // mText.append("\nThis is a test\n");
 
         ToggleButton toggleButton = (ToggleButton) findViewById(R.id.OnOff);
 
@@ -73,6 +71,7 @@ public class AutomaticTimeAnnouncer extends Activity implements
         startService(new Intent(AutomaticTimeAnnouncer.this,
                 TimeAnnouncerService.class));
 
+
         if (!mIsBound) {
             // class name because we want a specific service implementation
             // that
@@ -90,8 +89,9 @@ public class AutomaticTimeAnnouncer extends Activity implements
     @Override
     public void onDestroy() {
         super.onDestroy();
+        
         prefs.unregisterOnSharedPreferenceChangeListener(this);
-        // Log.v("AutomaticTimeAnnouncer", "onDestroy");
+        Log.v("AutomaticTimeAnnouncer", "onDestroy");
 
         if (mIsBound) {
             // Detach our existing connection.
@@ -99,7 +99,7 @@ public class AutomaticTimeAnnouncer extends Activity implements
             mIsBound = false;
 
             if (!mBoundService.isAnnouncerRunning()) {
-                // Log.v("AutomaticTimeAnnouncer", "onDestroy stop service");
+                 Log.v("AutomaticTimeAnnouncer", "onDestroy stop service");
                 stopService(new Intent(AutomaticTimeAnnouncer.this,
                         TimeAnnouncerService.class));
             }
@@ -189,6 +189,18 @@ public class AutomaticTimeAnnouncer extends Activity implements
         }
     }
 
+    //TODO: remove, only for debugging
+    public void onBackPressed() {
+        Log.v("AutomaticTimeAnnouncer", "onBackPressed");
+        super.onBackPressed();
+
+        this.finish();
+        
+//        int pid = android.os.Process.myPid();
+//
+//        android.os.Process.killProcess(pid);
+    }
+    
     private OnClickListener mOnOffListener = new OnClickListener() {
         public void onClick(View v) {
             // Log.v("AutomaticTimeAnnouncer", "OnOff");
