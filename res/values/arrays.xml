@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <string-array name="entries_say_time_intervall_preference">
+        <item>every 10s</item>
+        <item>every 20s</item>
+        <item>every 30s</item>
+        <item>every 1 min</item>
+        <item>every 5th min</item>
+        <item>every 10th min</item>
+        <item>every 20th min</item>
+        <item>every 30th min</item>
+        <item>every 1 hour</item>
+    </string-array>
+    <string-array name="entryvalues_say_time_intervall_preference">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+    </string-array>
+    <string-array name="entries_language_preference">
+        <item>English UK</item>
+        <item>English American</item>
+        <item>German</item>
+        <item>Spanish</item>
+        <item>French</item>
+        <item>Italian</item>
+    </string-array>
+    <string-array name="entryvalues_language_preference">
+        <item>en_UK</item>
+        <item>en_US</item>
+        <item>de_DE</item>
+        <item>es_ES</item>
+        <item>fr_FR</item>
+        <item>it_IT</item>
+    </string-array>
+</resources>

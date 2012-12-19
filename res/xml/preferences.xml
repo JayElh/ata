@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/inline_generel">
+        <ListPreference android:entries="@array/entries_say_time_intervall_preference" android:title="@string/say_time_intervall_title" android:key="sayTimeIntervallPreference" android:dialogTitle="@string/say_time_intervall_dialog_title" android:entryValues="@array/entryvalues_say_time_intervall_preference" />
+        <CheckBoxPreference android:title="@string/say_seconds" android:key="saySeconds" android:defaultValue="false" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/inline_language">
+        <ListPreference android:entries="@array/entries_language_preference" android:title="@string/language_preference_title" android:key="language_preference" android:dialogTitle="@string/language_preference_dialog_title" android:entryValues="@array/entryvalues_language_preference" />
+    </PreferenceCategory>
+</PreferenceScreen>

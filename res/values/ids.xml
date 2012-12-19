@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <item type="id" name="OnOff">false</item>
+    <item type="id" name="DigitalClock01">false</item>
+    <item type="id" name="AnalogClock01">false</item>
+    <item type="id" name="settings">false</item>
+    <item type="id" name="about">false</item>
+</resources>
